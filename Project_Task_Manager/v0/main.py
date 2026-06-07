@@ -3,9 +3,9 @@ from datetime import datetime
 total_failures = 0
 tasks = []
 
-tasks.append({'title': 'make task manager', 'status': 'in progress', 'priority': 1})
-tasks.append({'title': 'write documentation', 'status': 'not started', 'priority': 2})
-tasks.append({'title': 'test application', 'status': 'not started', 'priority': 3}) 
+tasks.append({'task': 'make task manager', 'status': 'in progress', 'priority': 1})
+tasks.append({'task': 'write documentation', 'status': 'not started', 'priority': 2})
+tasks.append({'task': 'test application', 'status': 'not started', 'priority': 3}) 
 
 
 def display_tasks(tasks):
@@ -17,7 +17,7 @@ def display_tasks(tasks):
             printed_any = True
             print(f'\n=== PRIORITY {priority} ===')
             for task in bucket_tasks:
-                print(f"- {task['title']} [{task['status']}]")
+                print(f"- {task['task']} [{task['status']}]")
     if not printed_any:
         print('\n Wiggle Party! Stop looking for something to do and go relax!')
 
@@ -81,16 +81,50 @@ def get_valid_priority():
         print('This is becoming a pattern.')
     return None
 
-        
+def add_task():
+    task = input('Enter what needs to be done: ').strip()
+    status = get_valid_status()
+    priority = get_valid_priority()
+    tasks.append({'task': task, 'status': status, 'priority': priority})
+    print(f'Task "{task}" added with status "{status}" and priority {priority}. . . Good job!')
 
-    
-get_valid_priority()
-    
+def get_valid_status():
+     status_options = ['not started', 'in progress', 'completed']
+     while True:
+        status = input('Enter task status (not started, in progress, completed): ').lower()
+        if status in status_options:
+            return status
+        else:
+            print('. . . No, chose from the options provided. . . not started, in progress, completed. . .')
+
+while True:
+    add_task()
+    display_tasks(tasks)
+    print('-----------------------')
+
+    continue_input = input('Do you want to add another? (yes/no/maybe): ').lower()
+
+    if continue_input == 'maybe':
+        print('I mean... I can\'t force you to add more tasks, but it would be good for you to practice entering valid input. . .')
+        continue
+
+    if continue_input != 'yes':
+        print('Well fine then!')
+        break
+
+display_tasks(tasks)
 
 # TODO:
 # 1. create special easter eggs function for certain priority numbers, like 69 or 420, that print a joke instead of an error message. (D)
 # 2. expand handle_invalid_input to check for these easter eggs and return the joke instead of an error message when they are entered. (D)
-# 3. create add_task function that prompts the user for task details (title, status, priority) and adds the task to the tasks list. 
-# 3.1 Use get_valid_priority to ensure the priority is valid.(D)
-# 4. create the status options as a predefined list and validate user input against it when adding a task.
-# 5. create get_valid_status function that prompts the user for a valid status and returns it.
+# 3. create add_task function that prompts the user for task details (task, status, priority) and adds the task to the tasks list. (D)
+# 3.1 Use get_valid_priority to ensure the priority is valid. (D)
+# 4. create the status options as a predefined list and validate user input against it when adding a task. (D)
+# 5. create get_valid_status function that prompts the user for a valid status and returns it. (D)
+
+# 6. implement a loop in the main program that allows the user to add multiple tasks until they choose to stop.  
+# 6.1 make a batch entry option that allows the user to enter multiple tasks at once, separated by '|' and parse the input to add each task accordingly.
+# 7. add functionality to display tasks sorted by priority, with clear formatting. 
+# 8. implement a feature to mark tasks as completed and move them to a separate completed tasks list.
+# 9. add error handling for edge cases, such as empty task descriptions or invalid status entries.
+# 10. create a function to save tasks to a file and load them back when the program starts, allowing for persistence between sessions.
