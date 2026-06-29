@@ -97,6 +97,21 @@ def get_valid_status():
         else:
             print('. . . No, chose from the options provided. . . not started, in progress, completed. . .')
 
+def save_task():
+    with open('tasks.txt', 'w') as file:
+        for task in tasks:
+            file.write(f'{task['task']},{task['status']},{task['priority']}\n')
+
+def load_tasks():
+    try:
+        with open('tasks.txt', 'r') as file:
+            for line in file:
+                task, status, priority = line.strip().split(',')
+                tasks.append({'task': task, 'status': status, 'priority': int(priority)})
+    except FileNotFoundError:
+        print('No saved tasks found. Starting with an empty task list.')
+
+load_tasks()
 while True:
     add_task()
     display_tasks(tasks)
@@ -113,6 +128,8 @@ while True:
         break
 
 display_tasks(tasks)
+save_task()
+
 
 # TODO:
 # 1. create special easter eggs function for certain priority numbers, like 69 or 420, that print a joke instead of an error message. (D)
