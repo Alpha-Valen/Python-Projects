@@ -109,7 +109,7 @@ def load_tasks():
                 task, status, priority = line.strip().split(',')
                 tasks.append({'task': task, 'status': status, 'priority': int(priority)})
     except FileNotFoundError:
-        print('No saved tasks found. Starting with an empty task list.')
+        print('I hope you are ready for some productivity...')
 
 load_tasks()
 while True:
@@ -119,13 +119,18 @@ while True:
 
     continue_input = input('Do you want to add another? (yes/no/maybe): ').lower()
 
-    if continue_input == 'maybe':
+    if continue_input == 'yes':
+        continue
+    elif continue_input == 'maybe'
         print('I mean... I can\'t force you to add more tasks, but it would be good for you to practice entering valid input. . .')
         continue
-
-    if continue_input != 'yes':
+    elif continue_input == 'no':
         print('Well fine then!')
         break
+    else:
+        print('This is a yes or no question . . .')
+        continue
+
 
 display_tasks(tasks)
 save_task()
@@ -144,4 +149,4 @@ save_task()
 # 7. add functionality to display tasks sorted by priority, with clear formatting. 
 # 8. implement a feature to mark tasks as completed and move them to a separate completed tasks list.
 # 9. add error handling for edge cases, such as empty task descriptions or invalid status entries.
-# 10. create a function to save tasks to a file and load them back when the program starts, allowing for persistence between sessions.
+# 10. create a function to save tasks to a file and load them back when the program starts, allowing for persistence between sessions. (D)
