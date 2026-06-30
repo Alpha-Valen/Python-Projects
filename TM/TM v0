@@ -3,11 +3,6 @@ from datetime import datetime
 total_failures = 0
 tasks = []
 
-tasks.append({'task': 'make task manager', 'status': 'in progress', 'priority': 1})
-tasks.append({'task': 'write documentation', 'status': 'not started', 'priority': 2})
-tasks.append({'task': 'test application', 'status': 'not started', 'priority': 3}) 
-
-
 def display_tasks(tasks):
     printed_any = False
 
@@ -90,19 +85,29 @@ def add_task():
     overall_status = 'in progress' if any(t['status'] != 'completed' for t in tasks) else 'completed'
     print(f'Overall task status: {overall_status}')
 
+def add_multiple_tasks():
+    batch_input = input('Enter tasks separated by "|": ')
+    batch_tasks = [t.strip() for t in batch_input.split('|') if t.strip()]
+
+    for task in batch_tasks:
+        status = get_valid_status()
+        priority = get_valid_priority()
+        tasks.append({'task': task, 'status': status, 'priority': priority})
+        print(f'Task "{task}" added with status "{status}" and priority {priority}. . . Good job!')
+    
 def get_valid_status():
-     status_options = ['not started', 'in progress', 'completed']
-     while True:
-        status = input('Enter task status (not started, in progress, completed): ').lower()
+    status_options = ['not started', 'in progress']
+    while True:
+        status = input('Enter task status (not started, in progress): ').lower()
         if status in status_options:
             return status
         else:
-            print('. . . No, chose from the options provided. . . not started, in progress, completed. . .')
+            print('. . . No, chose from the options provided. . . not started or in progress. . .')
 
 def save_task():
     with open('tasks.txt', 'w') as file:
         for task in tasks:
-            file.write(f'{task['task']},{task['status']},{task['priority']}\n')
+            file.write(f"{task['task']},{task['status']},{task['priority']}\n")
 
 def load_tasks():
     try:
@@ -114,20 +119,28 @@ def load_tasks():
         print('I hope you are ready for some productivity...')
 
 load_tasks()
+
 while True:
-    add_task()
-    display_tasks(tasks)
+    task_type = input('Do you want to add a single (S) task or multiple (M) tasks? (s/m): ').lower().strip()
+    if task_type == 's':
+        add_task()
+    elif task_type == 'm':
+        add_multiple_tasks()
+    else:
+        print('Please enter "s" for single or "m" for multiple.')
+        continue
     print('-----------------------')
 
-    continue_input = input('Do you want to add another? (yes/no/maybe): ').lower()
+    continue_input = input('Do you want to add another? (y/n/maybe): ').lower()
     continue_input = continue_input.strip()
+    print('=' * 15)
 
-    if continue_input == 'yes':
+    if continue_input == 'y':
         continue
     elif continue_input == 'maybe':
         print('I mean... I can\'t force you to add more tasks, but it would be good for you to practice entering valid input. . .')
         continue
-    elif continue_input == 'no':
+    elif continue_input == 'n':
         print('Well fine then!')
         break
     else:
@@ -138,7 +151,6 @@ while True:
 display_tasks(tasks)
 save_task()
 
-
 # TODO:
 # 1. create special easter eggs function for certain priority numbers, like 69 or 420, that print a joke instead of an error message. (D)
 # 2. expand handle_invalid_input to check for these easter eggs and return the joke instead of an error message when they are entered. (D)
@@ -147,9 +159,24 @@ save_task()
 # 4. create the status options as a predefined list and validate user input against it when adding a task. (D)
 # 5. create get_valid_status function that prompts the user for a valid status and returns it. (D)
 
-# 6. implement a loop in the main program that allows the user to add multiple tasks until they choose to stop.  
-# 6.1 make a batch entry option that allows the user to enter multiple tasks at once, separated by '|' and parse the input to add each task accordingly.
+# 6. implement a loop in the main program that allows the user to add multiple tasks until they choose to stop. (D)
+# 6.1 make a batch entry option that allows the user to enter multiple tasks at once, separated by '|' and parse the input to add each task accordingly. (D)
 # 7. add functionality to display tasks sorted by priority, with clear formatting. 
 # 8. implement a feature to mark tasks as completed and move them to a separate completed tasks list.
 # 9. add error handling for edge cases, such as empty task descriptions or invalid status entries.
 # 10. create a function to save tasks to a file and load them back when the program starts, allowing for persistence between sessions. (D)
+
+# 11. Implement a feature to display the overall status of tasks, indicating whether there are any tasks still in progress or if all tasks are completed.
+# 12. Add a feature to allow users to edit existing tasks, including changing the task description, status, or priority. 
+# 13. Implement a search functionality that allows users to find tasks based on keywords in the task description or by status.
+# 14. Create a feature to delete tasks from the list, with confirmation prompts to prevent accidental deletions.
+# 15. Add a feature to categorize tasks into different projects or categories, allowing users to filter and view tasks based on these categories.
+# 16. Implement a feature to set deadlines for tasks and display upcoming deadlines, with notifications for overdue tasks.
+
+# 17. Create a user-friendly interface with clear instructions and prompts, making it easy for users to navigate and manage their tasks effectively.
+# 18. Add a feature to export tasks to different formats, such as CSV or PDF, for easy sharing and reporting.
+# 19. Allow users to customize the priority levels and status options, providing flexibility to adapt the task management system to their specific needs.
+# 20. Implement a feature to track the time spent on each task, allowing users to log their work and analyze productivity over time.
+# 21. Create a feature to generate reports and statistics on task completion rates, average time spent on tasks, and other relevant metrics to help users improve their productivity.
+# 22. Add a feature to integrate with calendar applications, allowing users to sync their tasks and deadlines with their preferred calendar platform for better time management.
+# 23. Colorize terminal output based on task priority or status to enhance visual clarity and user experience.
