@@ -3,11 +3,6 @@ from datetime import datetime
 total_failures = 0
 tasks = []
 
-tasks.append({'task': 'make task manager', 'status': 'in progress', 'priority': 1})
-tasks.append({'task': 'write documentation', 'status': 'not started', 'priority': 2})
-tasks.append({'task': 'test application', 'status': 'not started', 'priority': 3}) 
-
-
 def display_tasks(tasks):
     printed_any = False
 
@@ -121,7 +116,7 @@ while True:
 
     if continue_input == 'yes':
         continue
-    elif continue_input == 'maybe'
+    elif continue_input == 'maybe':
         print('I mean... I can\'t force you to add more tasks, but it would be good for you to practice entering valid input. . .')
         continue
     elif continue_input == 'no':
