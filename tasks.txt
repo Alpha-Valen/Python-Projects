@@ -1,0 +1,3 @@
+task manager,in progress,2
+clean,not started,1
+homework,in progress,5

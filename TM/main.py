@@ -1,20 +1,28 @@
 from datetime import datetime
 
+
 total_failures = 0
 tasks = []
+completed_tasks = []
 
-def display_tasks(tasks):
+def display_active_tasks(tasks): 
+    displayed_tasks = []
     printed_any = False
-
+    task_number = 1
     for priority in range(1, 6):
         bucket_tasks = [task for task in tasks if task['priority'] == priority and task['status'] != 'completed']
         if bucket_tasks:
             printed_any = True
             print(f'\n=== PRIORITY {priority} ===')
             for task in bucket_tasks:
-                print(f"- {task['task']} [{task['status']}]")
+                print(f"{task_number}. {task['task']} [{task['status']}]")
+                task_number += 1
+                displayed_tasks.append(task)
+        
     if not printed_any:
         print('\n Wiggle Party! Stop looking for something to do and go relax!')
+
+    return displayed_tasks  
 
 def handle_easter_egg(value):
     special_numbers = {
@@ -77,13 +85,13 @@ def get_valid_priority():
     return None
 
 def add_task():
-    task = input('Enter what needs to be done: ').strip()
+    task = input('Oh, What are we doing? Tell me: ').strip()
     status = get_valid_status()
     priority = get_valid_priority()
     tasks.append({'task': task, 'status': status, 'priority': priority})
     print(f'Task "{task}" added with status "{status}" and priority {priority}. . . Good job!')
-    overall_status = 'in progress' if any(t['status'] != 'completed' for t in tasks) else 'completed'
-    print(f'Overall task status: {overall_status}')
+    # overall_status = 'in progress' if any(t['status'] != 'completed' for t in tasks) else 'completed'
+    # print(f'Overall task status: {overall_status}')
 
 def add_multiple_tasks():
     batch_input = input('Enter tasks separated by "|": ')
@@ -120,15 +128,66 @@ def load_tasks():
 
 load_tasks()
 
-while True:
-    task_type = input('Do you want to add a single (S) task or multiple (M) tasks? (s/m): ').lower().strip()
-    if task_type == 's':
-        add_task()
-    elif task_type == 'm':
-        add_multiple_tasks()
+def edit_task():
+    displayed_tasks = display_active_tasks(tasks)
+    task_to_edit = int(input('Which task did we forget to do? '))
+    task_to_edit_index = task_to_edit - 1
+    if 0 <= task_to_edit_index < len(displayed_tasks):
+        task = displayed_tasks[task_to_edit_index]
+        print(f'Editing task: {task["task"]} [{task["status"]}]')
+        new_status = get_valid_status()
+        task['status'] = new_status
+        print(f'Task "{task["task"]}" updated to status "{new_status}".')
     else:
-        print('Please enter "s" for single or "m" for multiple.')
-        continue
+        print(f'Task "{task_to_edit}" not found.')
+
+def view_completed_tasks():
+    completed_tasks = [task for task in tasks if task['status'] == 'completed']
+    if completed_tasks:
+        print('\n=== COMPLETED TASKS ===')
+        for task in completed_tasks:
+            print(f"{task['task']} [{task['status']}]")
+    else:
+        print('No completed tasks found.')
+
+def view_active_tasks():
+    display_active_tasks(tasks)
+ 
+def main_menu():
+    print("Welcome to your Task Manager!")
+    print('=' * 15)
+    print('Please choose an option:')
+    print('1. Add a single task')
+    print('2. Add multiple tasks')
+    print('3. Edit tasks')
+    print('4. View completed tasks')
+    print('5. View active tasks')
+    print('6. Display all tasks sorted by priority')
+    print('7. Save tasks')
+    print('8. Exit')
+
+while True:
+    main_menu()
+    choice = input('Enter your choice (1-8): ').strip()
+    if choice == '1':
+        add_task()
+    elif choice == '2':
+        add_multiple_tasks()
+    elif choice == '3':
+        edit_task()
+    elif choice == '4':
+        view_completed_tasks()
+    elif choice == '5':
+        view_active_tasks()
+    elif choice == '6':
+        save_task()
+        print('Tasks saved!')
+        break
+    elif choice == '7':
+        print('Exiting the Task Manager. Until next time!')
+        break
+    else:
+        print('Invalid choice. Please enter a number between 1 and 8.')
     print('-----------------------')
 
     continue_input = input('Do you want to add another? (y/n/maybe): ').lower()
@@ -148,7 +207,7 @@ while True:
         continue
 
 
-display_tasks(tasks)
+display_active_tasks(tasks)
 save_task()
 
 # TODO:
@@ -161,8 +220,9 @@ save_task()
 
 # 6. implement a loop in the main program that allows the user to add multiple tasks until they choose to stop. (D)
 # 6.1 make a batch entry option that allows the user to enter multiple tasks at once, separated by '|' and parse the input to add each task accordingly. (D)
-# 7. add functionality to display tasks sorted by priority, with clear formatting. 
+# 7. add functionality to display tasks sorted by priority, with clear formatting.(D)
 # 8. implement a feature to mark tasks as completed and move them to a separate completed tasks list.
+# 8.1 Create a main menu that allows users to choose between adding tasks, viewing tasks, marking tasks as completed, and viewing completed tasks. 
 # 9. add error handling for edge cases, such as empty task descriptions or invalid status entries.
 # 10. create a function to save tasks to a file and load them back when the program starts, allowing for persistence between sessions. (D)
 
