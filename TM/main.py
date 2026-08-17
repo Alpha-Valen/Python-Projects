@@ -1,6 +1,5 @@
 from datetime import datetime
 
-
 total_failures = 0
 tasks = []
 completed_tasks = []
@@ -138,8 +137,13 @@ def edit_task():
         new_status = get_valid_status()
         task['status'] = new_status
         print(f'Task "{task["task"]}" updated to status "{new_status}".')
-    else:
-        print(f'Task "{task_to_edit}" not found.')
+    
+        if task['status'] == 'completed':
+            completed_tasks.append(task)
+            tasks.remove(task)
+            print(f'Task "{task["task"]}" marked as completed and moved to completed tasks.') # add sass
+        else:
+            print(f'Task "{task_to_edit}" not found.')
 
 def view_completed_tasks():
     completed_tasks = [task for task in tasks if task['status'] == 'completed']
@@ -208,6 +212,7 @@ while True:
 
 
 display_active_tasks(tasks)
+load_tasks()
 save_task()
 
 # TODO:
@@ -221,8 +226,8 @@ save_task()
 # 6. implement a loop in the main program that allows the user to add multiple tasks until they choose to stop. (D)
 # 6.1 make a batch entry option that allows the user to enter multiple tasks at once, separated by '|' and parse the input to add each task accordingly. (D)
 # 7. add functionality to display tasks sorted by priority, with clear formatting.(D)
-# 8. implement a feature to mark tasks as completed and move them to a separate completed tasks list.
-# 8.1 Create a main menu that allows users to choose between adding tasks, viewing tasks, marking tasks as completed, and viewing completed tasks. 
+# 8. implement a feature to mark tasks as completed and move them to a separate completed tasks list.(D)
+# 8.1 Create a main menu that allows users to choose between adding tasks, viewing tasks, marking tasks as completed, and viewing completed tasks. (D)
 # 9. add error handling for edge cases, such as empty task descriptions or invalid status entries.
 # 10. create a function to save tasks to a file and load them back when the program starts, allowing for persistence between sessions. (D)
 
@@ -239,4 +244,4 @@ save_task()
 # 20. Implement a feature to track the time spent on each task, allowing users to log their work and analyze productivity over time.
 # 21. Create a feature to generate reports and statistics on task completion rates, average time spent on tasks, and other relevant metrics to help users improve their productivity.
 # 22. Add a feature to integrate with calendar applications, allowing users to sync their tasks and deadlines with their preferred calendar platform for better time management.
-# 23. Colorize terminal output based on task priority or status to enhance visual clarity and user experience.
+# 23. Colorize terminal output based on task priority or status to enhance visual clarity and user experience. 
