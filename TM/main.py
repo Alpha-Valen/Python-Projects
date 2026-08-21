@@ -164,19 +164,20 @@ save_task()
 # 8. implement a feature to mark tasks as completed and move them to a separate completed tasks list.(D)
 # 8.1 Create a main menu that allows users to choose between adding tasks, viewing tasks, marking tasks as completed, and viewing completed tasks. (D)
 # 9. add error handling for edge cases, such as empty task descriptions or invalid status entries.
-# 10. create a function to save tasks to a file and load them back when the program starts, allowing for persistence between sessions. (D)
 
+# 10. create a function to save tasks to a file and load them back when the program starts, allowing for persistence between sessions. (D)
 # 11. Implement a feature to display the overall status of tasks, indicating whether there are any tasks still in progress or if all tasks are completed.
 # 12. Add a feature to allow users to edit existing tasks, including changing the task description, status, or priority. 
 # 13. Implement a search functionality that allows users to find tasks based on keywords in the task description or by status.
 # 14. Create a feature to delete tasks from the list, with confirmation prompts to prevent accidental deletions.
 # 15. Add a feature to categorize tasks into different projects or categories, allowing users to filter and view tasks based on these categories.
-# 16. Implement a feature to set deadlines for tasks and display upcoming deadlines, with notifications for overdue tasks.
 
+# 16. Implement a feature to set deadlines for tasks and display upcoming deadlines, with notifications for overdue tasks.
 # 17. Create a user-friendly interface with clear instructions and prompts, making it easy for users to navigate and manage their tasks effectively.
 # 18. Add a feature to export tasks to different formats, such as CSV or PDF, for easy sharing and reporting.
 # 19. Allow users to customize the priority levels and status options, providing flexibility to adapt the task management system to their specific needs.
 # 20. Implement a feature to track the time spent on each task, allowing users to log their work and analyze productivity over time.
 # 21. Create a feature to generate reports and statistics on task completion rates, average time spent on tasks, and other relevant metrics to help users improve their productivity.
+
 # 22. Add a feature to integrate with calendar applications, allowing users to sync their tasks and deadlines with their preferred calendar platform for better time management.
 # 23. Colorize terminal output based on task priority or status to enhance visual clarity and user experience. 
