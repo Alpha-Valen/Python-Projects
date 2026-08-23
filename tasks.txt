@@ -1,3 +1,9 @@
 task manager,in progress,2
 clean,not started,1
 homework,in progress,5
+Cleaning,in progress,2
+task manager,in progress,2
+clean,not started,1
+homework,in progress,5
+refactoring,in progress,1
+no,not started,4

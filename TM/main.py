@@ -3,13 +3,16 @@ from validation import get_valid_priority, get_valid_status
 
 tasks = []
 completed_tasks = []
+status_options = ['not started', 'in progress', 'completed']
 
-def display_active_tasks(tasks): 
+def display_tasks_by_priority(tasks): 
     displayed_tasks = []
     printed_any = False
     task_number = 1
+
     for priority in range(1, 6):
-        bucket_tasks = [task for task in tasks if task['priority'] == priority and task['status'] != 'completed']
+        bucket_tasks = [task for task in tasks if task['priority'] == priority]
+
         if bucket_tasks:
             printed_any = True
             print(f'\n=== PRIORITY {priority} ===')
@@ -25,6 +28,11 @@ def display_active_tasks(tasks):
     
 def add_task():
     task = input('Oh, What are we doing? Tell me: ').strip()
+
+    while not task:
+        print('Don\'t start. . . enter something, anything.')
+        task = input('Let\'s try again. Tell me what you want to do: ').strip()
+
     status = get_valid_status()
     priority = get_valid_priority()
     if priority is None:
@@ -35,6 +43,24 @@ def add_task():
     print(f'Task "{task}" added with status "{status}" and priority {priority}. . . Good job!')
     # overall_status = 'in progress' if any(t['status'] != 'completed' for t in tasks) else 'completed'
     # print(f'Overall task status: {overall_status}')
+
+def add_one_task_at_a_time():
+    while True:
+        add_task()
+        while True:
+            continue_input = input('Do you want to add another? (y/n/maybe): ').lower()
+            continue_input = continue_input.strip()
+            if continue_input == 'y':
+                break
+            elif continue_input == 'n':
+                print('Well, that/s a choice. . .')
+                return
+            elif continue_input == 'maybe':
+                print('Okay, I will answer for you. . .  Add another.')
+                break
+            else:
+                print('This is a yes, no, or maybe question . . .')
+                continue
 
 def add_multiple_tasks():
     batch_input = input('Enter tasks separated by "|": ')
@@ -63,7 +89,7 @@ def load_tasks():
 load_tasks()
 
 def edit_task():
-    displayed_tasks = display_active_tasks(tasks)
+    displayed_tasks = display_tasks_by_priority(tasks)
     task_to_edit = int(input('Which task did we forget to do? '))
     task_to_edit_index = task_to_edit - 1
     if 0 <= task_to_edit_index < len(displayed_tasks):
@@ -82,16 +108,36 @@ def edit_task():
 
 def view_completed_tasks():
     completed_tasks = [task for task in tasks if task['status'] == 'completed']
-    if completed_tasks:
-        print('\n=== COMPLETED TASKS ===')
-        for task in completed_tasks:
-            print(f"{task['task']} [{task['status']}]")
-    else:
-        print('No completed tasks found.')
-
+    display_tasks_by_priority(completed_tasks)
+    
 def view_active_tasks():
-    display_active_tasks(tasks)
- 
+    active_task = [task for task in tasks if task['status'] != 'completed']
+    display_tasks_by_priority(active_task)
+
+def view_all_tasks():
+    all_tasks = [task for task in tasks if task['status'] in ['not started', 'in progress', 'completed']]
+    display_tasks_by_priority(all_tasks)
+
+def edit_task():
+    displayed_tasks = display_tasks_by_priority(tasks)
+    task_to_edit = int(input('What are we changing? Enter task number: '))
+    task_to_edit_index = task_to_edit -1
+    if 0 <= task_to_edit_index < len(displayed_tasks):
+        selected_task = displayed_tasks[task_to_edit_index]
+        new_task = input('New task description (Leave it to keep it the same): ').strip()
+        if new_task:
+            selected_task['task'] = new_task
+    new_status = input('New status (not started, in progress, completed) (Leave it to keep it the same): ').strip().lower()
+    if new_status in status_options:
+        selected_task['status'] = new_status
+    new_priority = input('New priority (1-5) (Leave it to keep it the same): ').strip()
+    if new_priority.isdigit() and 1 <= int(new_priority) <= 5:
+        selected_task['priority'] = int(new_priority) 
+        if new_priority:
+            if not new_priority.isdigit() or not (1 <= int(new_priority) <= 5):
+                print('Please. . . 1 through 5 😑')
+        
+
 def main_menu():
     print("Welcome to your Task Manager!")
     print('=' * 15)
@@ -101,7 +147,7 @@ def main_menu():
     print('3. Edit tasks')
     print('4. View completed tasks')
     print('5. View active tasks')
-    print('6. Display all tasks sorted by priority')
+    print('6. View all tasks')
     print('7. Save tasks')
     print('8. Exit')
 
@@ -109,7 +155,7 @@ while True:
     main_menu()
     choice = input('Enter your choice (1-8): ').strip()
     if choice == '1':
-        add_task()
+        add_one_task_at_a_time()
     elif choice == '2':
         add_multiple_tasks()
     elif choice == '3':
@@ -119,35 +165,17 @@ while True:
     elif choice == '5':
         view_active_tasks()
     elif choice == '6':
+        view_all_tasks()
+    elif choice == '7':
         save_task()
         print('Tasks saved!')
-        break
-    elif choice == '7':
-        print('Exiting the Task Manager. Until next time!')
+    elif choice == '8':
+        print('Byyyyyyyyeeeee. Until next time!')
         break
     else:
         print('Invalid choice. Please enter a number between 1 and 8.')
     print('-----------------------')
 
-    continue_input = input('Do you want to add another? (y/n/maybe): ').lower()
-    continue_input = continue_input.strip()
-    print('=' * 15)
-
-    if continue_input == 'y':
-        continue
-    elif continue_input == 'maybe':
-        print('I mean... I can\'t force you to add more tasks, but it would be good for you to practice entering valid input. . .')
-        continue
-    elif continue_input == 'n':
-        print('Well fine then!')
-        break
-    else:
-        print('This is a yes or no question . . .')
-        continue
-
-
-display_active_tasks(tasks)
-load_tasks()
 save_task()
 
 # TODO:
@@ -163,11 +191,11 @@ save_task()
 # 7. add functionality to display tasks sorted by priority, with clear formatting.(D)
 # 8. implement a feature to mark tasks as completed and move them to a separate completed tasks list.(D)
 # 8.1 Create a main menu that allows users to choose between adding tasks, viewing tasks, marking tasks as completed, and viewing completed tasks. (D)
-# 9. add error handling for edge cases, such as empty task descriptions or invalid status entries.
+# 9. add error handling for edge cases, such as empty task descriptions or invalid status entries. (D)
 
 # 10. create a function to save tasks to a file and load them back when the program starts, allowing for persistence between sessions. (D)
-# 11. Implement a feature to display the overall status of tasks, indicating whether there are any tasks still in progress or if all tasks are completed.
-# 12. Add a feature to allow users to edit existing tasks, including changing the task description, status, or priority. 
+# 11. Implement a feature to display the overall status of tasks, indicating whether there are any tasks still in progress or if all tasks are completed.(VETO - redundant with completed task feature)
+# 12. Add a feature to allow users to edit existing tasks, including changing the task description, status, or priority.(D)
 # 13. Implement a search functionality that allows users to find tasks based on keywords in the task description or by status.
 # 14. Create a feature to delete tasks from the list, with confirmation prompts to prevent accidental deletions.
 # 15. Add a feature to categorize tasks into different projects or categories, allowing users to filter and view tasks based on these categories.
