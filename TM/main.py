@@ -137,7 +137,6 @@ def edit_task():
             if not new_priority.isdigit() or not (1 <= int(new_priority) <= 5):
                 print('Please. . . 1 through 5 😑')
         
-
 def main_menu():
     print("Welcome to your Task Manager!")
     print('=' * 15)
