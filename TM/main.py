@@ -41,8 +41,6 @@ def add_task():
     
     tasks.append({'task': task, 'status': status, 'priority': priority})
     print(f'Task "{task}" added with status "{status}" and priority {priority}. . . Good job!')
-    # overall_status = 'in progress' if any(t['status'] != 'completed' for t in tasks) else 'completed'
-    # print(f'Overall task status: {overall_status}')
 
 def add_one_task_at_a_time():
     while True:
@@ -136,6 +134,45 @@ def edit_task():
         if new_priority:
             if not new_priority.isdigit() or not (1 <= int(new_priority) <= 5):
                 print('Please. . . 1 through 5 😑')
+
+def search():
+    keyword = input('Whatcha lookin for?').strip().lower()
+    found_tasks = [task for task in tasks if keyword in task['task'].lower() or keyword in task['status'].lower()]
+    if found_tasks:
+        print(f'FOUND IT! Here are the tasks that match "{keyword}":')
+        display_tasks_by_priority(found_tasks)
+    else:
+        print(f'Nope nothing here for "{keyword}". Want to add it?')
+        add_it = input('Add it? (y/n): ').strip().lower()
+
+        if add_it == 'y':
+            add_task()
+        else:
+            return
+
+def delete_task():
+    displayed_tasks = display_tasks_by_priority(tasks)
+    if not displayed_tasks:
+        print('No tasks to delete.')
+        return
+
+    task_to_delete = input("Which task do you want to delete? Enter task number: ").strip()
+    if not task_to_delete.isdigit():
+        print('This is a number pad situation.')
+        return
+
+    task_to_delete_index = int(task_to_delete) - 1
+
+    if 0 <= task_to_delete_index < len(displayed_tasks):
+        selected_task = displayed_tasks[task_to_delete_index]
+        confirm = input(f'Are you sure you want to delete "{selected_task["task"]}"? (y/n): ').strip().lower()
+        if confirm == 'y':
+            tasks.remove(selected_task)
+            print(f'Task "{selected_task["task"]}" has been deleted.')
+        else:
+            print('Deletion canceled.')
+    else:
+        print('Invalid task number.')
         
 def main_menu():
     print("Welcome to your Task Manager!")
@@ -148,34 +185,38 @@ def main_menu():
     print('5. View active tasks')
     print('6. View all tasks')
     print('7. Save tasks')
-    print('8. Exit')
+    print('8. Search tasks')
+    print('9. Exit')
 
-while True:
-    main_menu()
-    choice = input('Enter your choice (1-8): ').strip()
-    if choice == '1':
-        add_one_task_at_a_time()
-    elif choice == '2':
-        add_multiple_tasks()
-    elif choice == '3':
-        edit_task()
-    elif choice == '4':
-        view_completed_tasks()
-    elif choice == '5':
-        view_active_tasks()
-    elif choice == '6':
-        view_all_tasks()
-    elif choice == '7':
-        save_task()
-        print('Tasks saved!')
-    elif choice == '8':
-        print('Byyyyyyyyeeeee. Until next time!')
-        break
-    else:
-        print('Invalid choice. Please enter a number between 1 and 8.')
-    print('-----------------------')
+if __name__ == "__main__":
+    while True:
+        main_menu()
+        choice = input('Enter your choice (1-9): ').strip()
+        if choice == '1':
+            add_one_task_at_a_time()
+        elif choice == '2':
+            add_multiple_tasks()
+        elif choice == '3':
+            edit_task()
+        elif choice == '4':
+            view_completed_tasks()
+        elif choice == '5':
+            view_active_tasks()
+        elif choice == '6':
+            view_all_tasks()
+        elif choice == '7':
+            save_task()
+            print('Tasks saved!')
+        elif choice == '8':
+            search()
+        elif choice == '9':
+            print('Byyyyyyyyeeeee. Until next time!')
+            break
+        else:
+            print('Invalid choice. Please enter a number between 1 and 9.')
+        print('-----------------------')
 
-save_task()
+    save_task()
 
 # TODO:
 # 1. create special easter eggs function for certain priority numbers, like 69 or 420, that print a joke instead of an error message. (D)
@@ -195,8 +236,8 @@ save_task()
 # 10. create a function to save tasks to a file and load them back when the program starts, allowing for persistence between sessions. (D)
 # 11. Implement a feature to display the overall status of tasks, indicating whether there are any tasks still in progress or if all tasks are completed.(VETO - redundant with completed task feature)
 # 12. Add a feature to allow users to edit existing tasks, including changing the task description, status, or priority.(D)
-# 13. Implement a search functionality that allows users to find tasks based on keywords in the task description or by status.
-# 14. Create a feature to delete tasks from the list, with confirmation prompts to prevent accidental deletions.
+# 13. Implement a search functionality that allows users to find tasks based on keywords in the task description or by status. (D)
+# 14. Create a feature to delete tasks from the list, with confirmation prompts to prevent accidental deletions. (D)
 # 15. Add a feature to categorize tasks into different projects or categories, allowing users to filter and view tasks based on these categories.
 
 # 16. Implement a feature to set deadlines for tasks and display upcoming deadlines, with notifications for overdue tasks.
@@ -207,4 +248,4 @@ save_task()
 # 21. Create a feature to generate reports and statistics on task completion rates, average time spent on tasks, and other relevant metrics to help users improve their productivity.
 
 # 22. Add a feature to integrate with calendar applications, allowing users to sync their tasks and deadlines with their preferred calendar platform for better time management.
-# 23. Colorize terminal output based on task priority or status to enhance visual clarity and user experience. 
+# 23. Colorize terminal output based on task priority or status to enhance visual clarity and user experience.
